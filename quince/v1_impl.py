@@ -37,7 +37,8 @@ class Impl(object):
         return self.driver.find_streams(**kwargs)
 
     def get_stream(self, stream_id, details):
-        return None
+        # Returns a list, but should be just one stream.
+        return self.driver.get_stream(stream_id, details)
 
     def delete_stream(self, stream_id):
         pass
