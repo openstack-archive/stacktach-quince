@@ -13,7 +13,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import oahu.config
+
 
 class Impl(object):
-    def get_events(self, resp):
-        return []
+    def __init__(self, config, scratchpad):
+        """config is a ConfigParser object.
+           Use the scratchpad to ensure we don't create multiple
+           connections to the db.
+        """
+
+        if 'quincy_config' not in scratchpad:
+            target = config.get('quince', 'oahu_config')
+            print "Quince is using oahu driver from %s" % target
+            quincy_config = oahu.config.get_config(target)
+            scratchpad['quincy_config'] = quincy_config
+            scratchpad['quincy_driver'] = quincy_config.get_driver()
+
+        self.oahu_config = scratchpad['quincy_config']
+        self.driver = scratchpad['quincy_driver']
+
+    def get_streams(self, **kwargs):
+        return self.driver.find_streams(**kwargs)
+
+    def get_stream(self, stream_id, details):
+        return None
+
+    def delete_stream(self, stream_id):
+        pass
+
+    def reset_stream(self, stream_id):
+        pass
