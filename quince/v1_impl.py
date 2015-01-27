@@ -54,8 +54,9 @@ class Impl(object):
         self.winchester_config = scratchpad['quincy_config']
         self.driver = scratchpad['quincy_driver']
 
-    def get_streams(self, state=None, older_than=None, younger_than=None,
-                    trigger_name=None, distinguishing_traits=None):
+    def get_streams(self, count=False, state=None, older_than=None,
+                    younger_than=None, trigger_name=None,
+                    distinguishing_traits=None):
 
         if state is not None:
             try:
@@ -63,10 +64,10 @@ class Impl(object):
             except KeyError:
                 logger.error("invalid stream state %s" % state)
                 raise
-        return self.driver.find_streams(state=state, name=trigger_name,
-                                        younger_than=younger_than,
-                                        older_than=older_than,
-                                        distinguishing_traits=distinguishing_traits)
+        return self.driver.find_streams(count=count,
+                            state=state, name=trigger_name,
+                            younger_than=younger_than, older_than=older_than,
+                            distinguishing_traits=distinguishing_traits)
 
     def get_stream(self, stream_id, details):
         stream = int(stream_id)
