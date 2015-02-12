@@ -56,7 +56,7 @@ class Impl(object):
 
     def get_streams(self, count=False, state=None, older_than=None,
                     younger_than=None, trigger_name=None,
-                    distinguishing_traits=None):
+                    distinguishing_traits=None, mark=None, limit=None):
 
         if state is not None:
             try:
@@ -67,7 +67,8 @@ class Impl(object):
         return self.driver.find_streams(count=count,
                             state=state, name=trigger_name,
                             younger_than=younger_than, older_than=older_than,
-                            distinguishing_traits=distinguishing_traits)
+                            distinguishing_traits=distinguishing_traits,
+                            mark=mark, limit=limit)
 
     def get_stream(self, stream_id, details):
         stream = int(stream_id)
