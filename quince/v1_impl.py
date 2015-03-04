@@ -54,7 +54,7 @@ class Impl(object):
         self.winchester_config = scratchpad['quincy_config']
         self.driver = scratchpad['quincy_driver']
 
-    def get_streams(self, count=False, state=None, older_than=None,
+    def find_streams(self, count=False, state=None, older_than=None,
                     younger_than=None, trigger_name=None,
                     distinguishing_traits=None, mark=None, limit=None):
 
@@ -77,8 +77,23 @@ class Impl(object):
                                         include_events=details)
 
     def delete_stream(self, stream_id):
-        pass
+        stream_id = int(stream_id)
+        stream = self.driver.get_stream_by_id(stream_id)
+        self.driver.purge_stream(stream)
 
     def reset_stream(self, stream_id):
-        stream = int(stream_id)
-        self.driver.reset_stream(stream_id)
+        stream_id = int(stream_id)
+        stream = self.driver.get_stream_by_id(stream_id)
+        self.driver.reset_stream(stream)
+
+    def find_events(self, from_datetime=None, to_datetime=None,
+                         event_name=None, traits=[],
+                         mark=None, limit=None):
+        return self.driver.find_events(from_datetime=from_datetime,
+                                       to_datetime=to_datetime,
+                                       event_name=event_name,
+                                       traits=traits,
+                                       mark=mark, limit=limit)
+
+    def get_event(self, message_id):
+        return self.driver.get_event_by_message_id(message_id)
