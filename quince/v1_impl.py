@@ -88,12 +88,13 @@ class Impl(object):
 
     def find_events(self, from_datetime=None, to_datetime=None,
                          event_name=None, traits=[],
-                         mark=None, limit=None):
+                         mark=None, limit=None, count=False):
         return self.driver.find_events(from_datetime=from_datetime,
                                        to_datetime=to_datetime,
                                        event_name=event_name,
                                        traits=traits,
-                                       mark=mark, limit=limit)
+                                       mark=mark, limit=limit,
+                                       count=count)
 
     def get_event(self, message_id):
         return self.driver.get_event_by_message_id(message_id)
