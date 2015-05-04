@@ -15,8 +15,9 @@
 
 import logging
 
-
-from winchester.config import ConfigManager, ConfigSection, ConfigItem
+from winchester.config import ConfigItem
+from winchester.config import ConfigManager
+from winchester.config import ConfigSection
 from winchester.db import DBInterface
 from winchester import models
 
@@ -25,18 +26,20 @@ logger = logging.getLogger(__name__)
 
 
 class Impl(object):
-
     @classmethod
     def config_description(cls):
-        return dict(config_path=ConfigItem(
-                            help="Path(s) to find additional config files",
-                                 multiple=True, default='.'),
-                    database=ConfigSection(help="Database connection info.",
-                            config_description=DBInterface.config_description()),
-                   )
+        return dict(
+            config_path=ConfigItem(
+                help="Path(s) to find additional config files",
+                multiple=True, default='.'),
+            database=ConfigSection(
+                help="Database connection info.",
+                config_description=DBInterface.config_description()),
+        )
 
     def __init__(self, config, scratchpad):
         """config is a ConfigParser object.
+
            Use the scratchpad to ensure we don't create multiple
            connections to the db.
         """
@@ -46,17 +49,18 @@ class Impl(object):
             logger.debug("Quince is using Winchester config from %s" % target)
             quincy_config = ConfigManager.load_config_file(target)
             quincy_config = ConfigManager.wrap(quincy_config,
-                                self.config_description())
+                                               self.config_description())
 
             scratchpad['quincy_config'] = quincy_config
-            scratchpad['quincy_driver'] = DBInterface(quincy_config['database'])
+            scratchpad['quincy_driver'] = DBInterface(
+                quincy_config['database'])
 
         self.winchester_config = scratchpad['quincy_config']
         self.driver = scratchpad['quincy_driver']
 
     def find_streams(self, count=False, state=None, older_than=None,
-                    younger_than=None, trigger_name=None,
-                    distinguishing_traits=None, mark=None, limit=None):
+                     younger_than=None, trigger_name=None,
+                     distinguishing_traits=None, mark=None, limit=None):
 
         if state is not None:
             try:
@@ -64,14 +68,16 @@ class Impl(object):
             except KeyError:
                 logger.error("invalid stream state %s" % state)
                 raise
-        return self.driver.find_streams(count=count,
-                            state=state, name=trigger_name,
-                            younger_than=younger_than, older_than=older_than,
-                            distinguishing_traits=distinguishing_traits,
-                            mark=mark, limit=limit)
+        return self.driver.find_streams(
+            count=count,
+            state=state, name=trigger_name,
+            younger_than=younger_than,
+            older_than=older_than,
+            distinguishing_traits=distinguishing_traits,
+            mark=mark, limit=limit)
 
     def get_stream(self, stream_id, details):
-        stream = int(stream_id)
+        stream_id = int(stream_id)
         # Returns a list, but should be just one stream.
         return self.driver.find_streams(stream_id=stream_id,
                                         include_events=details)
@@ -87,12 +93,12 @@ class Impl(object):
         self.driver.reset_stream(stream)
 
     def find_events(self, from_datetime=None, to_datetime=None,
-                         event_name=None, traits=[],
-                         mark=None, limit=None, count=False):
+                    event_name=None, traits=None,
+                    mark=None, limit=None, count=False):
         return self.driver.find_events(from_datetime=from_datetime,
                                        to_datetime=to_datetime,
                                        event_name=event_name,
-                                       traits=traits,
+                                       traits=traits or [],
                                        mark=mark, limit=limit,
                                        count=count)
 

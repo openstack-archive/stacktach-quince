@@ -1,2 +1,3 @@
+hacking>=0.10.0,<0.11
 winchester >=0.0.dev0
 simport >=0.0.dev0
