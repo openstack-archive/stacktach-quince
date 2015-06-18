@@ -98,7 +98,7 @@ class Impl(object):
         return self.driver.find_events(from_datetime=from_datetime,
                                        to_datetime=to_datetime,
                                        event_name=event_name,
-                                       traits=traits or [],
+                                       traits=traits or {},
                                        mark=mark, limit=limit,
                                        count=count)
 
