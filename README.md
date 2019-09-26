@@ -1,4 +1,3 @@
-quince
-======
+# This repo has moved to OpenDev
 
-The reference API implementation for Quincy (REST interface to StackTach.v3)
+It can now be found at [https://opendev.org/x/stacktach-quince](https://opendev.org/x/stacktach-quince)
